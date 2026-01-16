@@ -1,15 +1,8 @@
 '''
-Author:     Sai Vignesh Golla
-LinkedIn:   https://www.linkedin.com/in/saivigneshgolla/
+Author:     Auto Job Applier System
 
-Copyright (C) 2024 Sai Vignesh Golla
+[REMOVED]
 
-License:    GNU Affero General Public License
-            https://www.gnu.org/licenses/agpl-3.0.en.html
-            
-GitHub:     https://github.com/GodsScion/Auto_job_applier_linkedIn
-
-version:    24.12.29.12.30
 '''
 
 
@@ -18,6 +11,8 @@ import os
 import csv
 import re
 import pyautogui
+from config.questions import DRY_RUN
+
 
 # Set CSV field size limit to prevent field size errors
 csv.field_size_limit(1000000)  # Set to 1MB instead of default 131KB
@@ -1039,14 +1034,27 @@ def apply_to_jobs(search_terms: list[str]) -> None:
                                     pause_before_submit = False if "Disable Pause" == decision else True
                                     # try_xp(modal, ".//span[normalize-space(.)='Review']")
                                 follow_company(modal)
-                                if wait_span_click(driver, "Submit application", 2, scrollTop=True): 
+                                if DRY_RUN:
+                                    print_lg("DRY RUN ENABLED → Skipping submit application")
+                                    screenshot(driver, job_id, "Dry run - submit skipped")
+                                    date_applied = None
+
+                                elif wait_span_click(driver, "Submit application", 2, scrollTop=True): 
                                     date_applied = datetime.now()
-                                    if not wait_span_click(driver, "Done", 2): actions.send_keys(Keys.ESCAPE).perform()
-                                elif errored != "stuck" and cur_pause_before_submit and "Yes" in pyautogui.confirm("You submitted the application, didn't you 😒?", "Failed to find Submit Application!", ["Yes", "No"]):
+                                    if not wait_span_click(driver, "Done", 2):
+                                        actions.send_keys(Keys.ESCAPE).perform()
+
+                                elif errored != "stuck" and cur_pause_before_submit and "Yes" in pyautogui.confirm(
+                                        "You submitted the application, didn't you 😒?",
+                                        "Failed to find Submit Application!",
+                                        ["Yes", "No"]
+                                    ):
                                     date_applied = datetime.now()
                                     wait_span_click(driver, "Done", 2)
+
                                 else:
                                     print_lg("Since, Submit Application failed, discarding the job application...")
+
                                     # if screenshot_name == "Not Available":  screenshot_name = screenshot(driver, job_id, "Failed to click Submit application")
                                     # else:   screenshot_name = [screenshot_name, screenshot(driver, job_id, "Failed to click Submit application")]
                                     if errored == "nose": raise Exception("Failed to click Submit application 😑")
@@ -1203,22 +1211,8 @@ def main() -> None:
         print_lg("\nFailed jobs:                    {}".format(failed_count))
         print_lg("Irrelevant jobs skipped:        {}\n".format(skip_count))
         if randomly_answered_questions: print_lg("\n\nQuestions randomly answered:\n  {}  \n\n".format(";\n".join(str(question) for question in randomly_answered_questions)))
-        quote = choice([
-            "You're one step closer than before.", 
-            "All the best with your future interviews.", 
-            "Keep up with the progress. You got this.", 
-            "If you're tired, learn to take rest but never give up.",
-            "Success is not final, failure is not fatal: It is the courage to continue that counts. - Winston Churchill",
-            "Believe in yourself and all that you are. Know that there is something inside you that is greater than any obstacle. - Christian D. Larson",
-            "Every job is a self-portrait of the person who does it. Autograph your work with excellence.",
-            "The only way to do great work is to love what you do. If you haven't found it yet, keep looking. Don't settle. - Steve Jobs",
-            "Opportunities don't happen, you create them. - Chris Grosser",
-            "The road to success and the road to failure are almost exactly the same. The difference is perseverance.",
-            "Obstacles are those frightful things you see when you take your eyes off your goal. - Henry Ford",
-            "The only limit to our realization of tomorrow will be our doubts of today. - Franklin D. Roosevelt"
-            ])
-        msg = f"\n{quote}\n\n\nBest regards,\nSai Vignesh Golla\nhttps://www.linkedin.com/in/saivigneshgolla/\n\n"
-        pyautogui.alert(msg, "Exiting..")
+        print_lg("Run completed. Exiting Auto Job Applier System.")
+
         print_lg(msg,"Closing the browser...")
         if tabs_count >= 10:
             msg = "NOTE: IF YOU HAVE MORE THAN 10 TABS OPENED, PLEASE CLOSE OR BOOKMARK THEM!\n\nOr it's highly likely that application will just open browser and not do anything next time!" 

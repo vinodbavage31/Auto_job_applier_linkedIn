@@ -1,15 +1,8 @@
 '''
-Author:     Sai Vignesh Golla
-LinkedIn:   https://www.linkedin.com/in/saivigneshgolla/
+Author:     Auto Job Applier System
 
-Copyright (C) 2024 Sai Vignesh Golla
+[REMOVED]
 
-License:    GNU Affero General Public License
-            https://www.gnu.org/licenses/agpl-3.0.en.html
-            
-GitHub:     https://github.com/GodsScion/Auto_job_applier_linkedIn
-
-version:    24.12.29.12.30
 '''
 
 
@@ -19,7 +12,7 @@ version:    24.12.29.12.30
 # >>>>>>>>>>> Easy Apply Questions & Inputs <<<<<<<<<<<
 
 # Give an relative path of your default resume to be uploaded. If file in not found, will continue using your previously uploaded resume in LinkedIn.
-default_resume_path = "resumes/your_resume.pdf"      # (In Development)
+default_resume_path = "Downloads/Vinod bavage(5).pdf"      # (In Development)
 
 # What do you want to answer for questions that ask about years of experience you have, this is different from current_experience? 
 years_of_experience = "1"          # A number in quotes Eg: "0","1","2","3","4", etc.
@@ -138,6 +131,7 @@ Note: Will be treated as False if `run_in_background = True`
 # Do you want to overwrite previous answers?
 overwrite_previous_answers = False # True or False, Note: True or False are case-sensitive
 
+DRY_RUN = True
 
 
 
@@ -157,6 +151,7 @@ As an independent developer, I pour my heart and soul into creating tools like t
 Your support, whether through donations big or small or simply spreading the word, means the world to me and helps keep this project alive and thriving.
 
 Gratefully yours 🙏🏻,
-Sai Vignesh Golla
+Auto Job Applier System
+
 '''
 ############################################################################################################

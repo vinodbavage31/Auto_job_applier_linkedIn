@@ -1,15 +1,8 @@
 '''
-Author:     Sai Vignesh Golla
-LinkedIn:   https://www.linkedin.com/in/saivigneshgolla/
+Author:     Auto Job Applier System
 
-Copyright (C) 2024 Sai Vignesh Golla
+[REMOVED]
 
-License:    GNU Affero General Public License
-            https://www.gnu.org/licenses/agpl-3.0.en.html
-            
-GitHub:     https://github.com/GodsScion/Auto_job_applier_linkedIn
-
-version:    24.12.29.12.30
 '''
 
 from modules.helpers import make_directories
@@ -50,12 +43,26 @@ try:
     wait = WebDriverWait(driver, 5)
     actions = ActionChains(driver)
 except Exception as e:
-    msg = 'Seems like either... \n\n1. Chrome is already running. \nA. Close all Chrome windows and try again. \n\n2. Google Chrome or Chromedriver is out dated. \nA. Update browser and Chromedriver (You can run "windows-setup.bat" in /setup folder for Windows PC to update Chromedriver)! \n\n3. If error occurred when using "stealth_mode", try reinstalling undetected-chromedriver. \nA. Open a terminal and use commands "pip uninstall undetected-chromedriver" and "pip install undetected-chromedriver". \n\n\nIf issue persists, try Safe Mode. Set, safe_mode = True in config.py \n\nPlease check GitHub discussions/support for solutions https://github.com/GodsScion/Auto_job_applier_linkedIn \n                                   OR \nReach out in discord ( https://discord.gg/fFp7uUzWCY )'
-    if isinstance(e,TimeoutError): msg = "Couldn't download Chrome-driver. Set stealth_mode = False in config!"
-    print_lg(msg)
-    critical_error_log("In Opening Chrome", e)
-    from pyautogui import alert
-    alert(msg, "Error in opening chrome")
-    try: driver.quit()
-    except NameError: exit()
+    error_msg = (
+        "Chrome failed to start.\n\n"
+        "Common causes:\n"
+        "- Chrome is already running\n"
+        "- Chromedriver version mismatch\n"
+        "- Stealth mode instability\n\n"
+        "Suggested actions:\n"
+        "- Close all Chrome windows\n"
+        "- Run setup/windows-setup.bat\n"
+        "- Try safe_mode = True\n"
+    )
+
+    print_lg(error_msg)
+    critical_error_log("Chrome startup failure", e)
+
+    try:
+        driver.quit()
+    except Exception:
+        pass
+
+    raise RuntimeError("Chrome initialization failed") from e
+
     
